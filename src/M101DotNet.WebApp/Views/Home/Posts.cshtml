@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "All Posts";
+}
+
+<h2>@ViewData["Title"] @(@ViewData["Tags"] != null ? "using Tag " + @ViewData["Tags"] : "")</h2>
+
+@foreach (var post in Model)
+{
+    <h4>@post.Title by @post.Author on @post.CreatedAtUtc</h4>
+    <p>@post.Content.Substring(0, Math.Min(post.Content.Length, 200))</p>
+    <p><a class="btn btn-default btn-sm" href="@Url.Action("Post", "Home", new { id = post.Id })">View</a></p>
+}
