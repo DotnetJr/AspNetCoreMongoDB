@@ -192,6 +192,34 @@ namespace M101DotNet.WebApp.Controllers
             return RedirectToAction("Post", new { id = model.PostId });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CommentLike(CommentLikeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Post", new { id = model.PostId });
+            }
+            
+            // MongoDB Context
+            var blogContext = new MongoBlogContext(_dbSettings);
+
+            // XXX WORK HERE
+            // Increment the Likes field for the comment at {model.Index}
+            // inside the post {model.PostId}.
+            //
+            // NOTE: The 2.0.0 driver has a bug in the expression parser and 
+            // might throw an exception depending on how you solve this problem. 
+            // This is documented here along with a workaround:
+            // https://jira.mongodb.org/browse/CSHARP-1246
+            var fieldName = string.Format("Comments.{0}.Likes", model.Index);
+
+            await blogContext.Posts.UpdateOneAsync(x => x.Id == ObjectId.Parse(model.PostId),
+                                                   Builders<Post>.Update.Inc(fieldName, 1));
+
+
+            return RedirectToAction("Post", new { id = model.PostId });
+        }
+
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);

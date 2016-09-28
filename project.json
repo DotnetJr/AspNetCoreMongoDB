@@ -44,7 +44,6 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "System.Collections.Specialized": "4.0.1",
-    "MongoDB.Driver": "2.3.0-beta1"
+    "MongoDB.Driver": "2.3.0"
   }
 }
